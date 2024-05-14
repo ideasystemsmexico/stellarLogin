@@ -12,18 +12,23 @@ import {
     Platform,
     Image,
     StatusBar,
+    ImageBackground,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import logoImage from '../img/LOGOSTELLARFORT.png';
 import googleLogo from '../img/google.png';
+import facebookLogo from '../img/facebook.png'; // Agregamos la imagen de Facebook
 import userIcon from '../img/usuario.png';
 import passwordIcon from '../img/pass.png';
+import backgroundImage from '../img/Wallpaper.jpg';
 
 export default function Login() {
     const navigation = useNavigation();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isUsernameFocused, setIsUsernameFocused] = useState(false);
+    const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
     useEffect(() => {
         navigation.setOptions({
@@ -44,16 +49,12 @@ export default function Login() {
     };
 
     return (
-        <LinearGradient colors={['#090819', '#4B0988']} style={styles.gradient}>
+        <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
             <StatusBar barStyle="white-content"/>
-            
-            {/* Colocamos el título y el logo fuera del KeyboardAvoidingView */}
             <View style={styles.topContainer}>
                 <Image source={logoImage} style={styles.logo} />
                 <Text style={styles.title}>STELLAR</Text>
             </View>
-
-            {/* Envuelve el contenido principal en TouchableWithoutFeedback */}
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <KeyboardAvoidingView
                     style={styles.container}
@@ -64,33 +65,34 @@ export default function Login() {
                         contentContainerStyle={styles.scrollContainer}
                         showsVerticalScrollIndicator={false}
                     >
-                        {/* Los elementos de entrada y botones */}
                         <View style={styles.inputContainer}>
                             <Image source={userIcon} style={styles.icon} />
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {borderColor: isUsernameFocused ? '#FFFFFF' : 'rgba(116, 116, 116, 0.5)'}]}
                                 placeholder="Usuario"
                                 value={username}
                                 onChangeText={setUsername}
                                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                onFocus={() => setIsUsernameFocused(true)}
+                                onBlur={() => setIsUsernameFocused(false)}
                             />
                         </View>
-
                         <View style={styles.inputContainer}>
                             <Image source={passwordIcon} style={styles.icon} />
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, {borderColor: isPasswordFocused ? '#FFFFFF' : 'rgba(116, 116, 116, 0.5)'}]}
                                 placeholder="Contraseña"
                                 value={password}
                                 onChangeText={setPassword}
                                 secureTextEntry
                                 placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                                onFocus={() => setIsPasswordFocused(true)}
+                                onBlur={() => setIsPasswordFocused(false)}
                             />
                         </View>
-
                         <TouchableOpacity onPress={handleLogin}>
                             <LinearGradient
-                                colors={['#8f34d9', '#382066']}
+                                colors={['#24284E', '#24284E']}
                                 start={{ x: 0.5, y: 0 }}
                                 end={{ x: 0.5, y: 1 }}
                                 style={styles.button}
@@ -98,31 +100,38 @@ export default function Login() {
                                 <Text style={styles.buttonText}>Iniciar sesión</Text>
                             </LinearGradient>
                         </TouchableOpacity>
-
                         <View style={styles.separator}>
                             <View style={styles.line} />
-                            <Text style={styles.separatorText}>Ó</Text>
+                            <Text style={styles.separatorText}>Or continue with</Text>
                             <View style={styles.line} />
                         </View>
-
-                        <TouchableOpacity onPress={() => console.log('Iniciar sesión con Google')}>
-                            <LinearGradient
-                                colors={['#FFFFFF', '#FFFFFF']}
-                                start={{ x: 0.5, y: 0 }}
-                                end={{ x: 0.5, y: 1 }}
-                                style={styles.socialLoginButton}
-                            >
-                                <Image source={googleLogo} style={styles.googleLogo} />
-                                <Text style={styles.socialLoginButtonText}>
-                                    Iniciar sesión con Google
-                                </Text>
-                            </LinearGradient>
-                        </TouchableOpacity>
-
+                        <View style={styles.socialButtonsContainer}>
+                            <TouchableOpacity onPress={() => console.log('Iniciar sesión con Google')}>
+                                <LinearGradient
+                                    colors={['#24284E', '#24284E']}
+                                    start={{ x: 0.5, y: 0 }}
+                                    end={{ x: 0.5, y: 1 }}
+                                    style={styles.socialLoginButton}
+                                >
+                                    <Image source={googleLogo} style={styles.socialLogo} />
+                                    <Text style={styles.socialLoginButtonText}>Google</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => console.log('Iniciar sesión con Facebook')}>
+                                <LinearGradient
+                                    colors={['#24284E', '#24284E']}
+                                    start={{ x: 0.5, y: 0 }}
+                                    end={{ x: 0.5, y: 1 }}
+                                    style={styles.socialLoginButton}
+                                >
+                                    <Image source={facebookLogo} style={styles.socialLogo} />
+                                    <Text style={styles.socialLoginButtonText}>Facebook</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </View>
                         <Text style={styles.link} onPress={handleForgotPassword}>
                             Olvidé mi contraseña
                         </Text>
-
                         <View style={styles.registerContainer}>
                             <Text style={styles.registerText}>¿No tienes una cuenta?</Text>
                             <TouchableOpacity onPress={handleCreateAccount}>
@@ -132,32 +141,31 @@ export default function Login() {
                     </ScrollView>
                 </KeyboardAvoidingView>
             </TouchableWithoutFeedback>
-        </LinearGradient>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    gradient: {
+    backgroundImage: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        resizeMode: 'cover',
     },
     container: {
         flex: 1,
         width: '100%',
         paddingBottom: Platform.OS === 'ios' ? 80 : 0,
-        marginTop: -10, // Ajusta este valor según tus necesidades para mover el contenido más arriba
+        marginTop: -10,
     },
     topContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20, // Ajusta este valor si es necesario
+        marginBottom: 20,
     },
     scrollContainer: {
         flexGrow: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 1, // Agrega un paddingTop para mover los elementos más arriba
+        paddingTop: 1,
         paddingBottom: -50,
     },
     logo: {
@@ -177,9 +185,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        borderColor: 'rgba(96, 37, 166, 0.7)',
+        borderColor: 'rgba(116, 116, 116, 0.5)',
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 2,
+        borderTopColor: 'transparent',
+        borderLeftColor: 'transparent',
+        borderRightColor: 'transparent',
         paddingLeft: 10,
         paddingRight: 15,
         marginBottom: 10,
@@ -199,7 +210,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     link: {
-        color: '#FFFFFF',
+        color: 'rgba(116, 116, 116, 0.5)',
         marginTop: 10,
         marginBottom: 10,
         textAlign: 'center',
@@ -212,7 +223,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     registerText: {
-        color: '#8f34d9',
+        color: 'rgba(116, 116, 116, 1)',
         fontSize: 15,
     },
     registerLink: {
@@ -236,15 +247,13 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     buttonText: {
-        color: '#e0caed',
+        color: '#FFFFFF',
         fontSize: 18,
         fontFamily: 'Courier New',
-        textShadowColor: '#8a00ad',
-        textShadowOffset: { width: 1, height: 1 },
-        textShadowRadius: 0,
+        fontWeight:'bold'
     },
     socialLoginButton: {
-        width: 300,
+        width: 140,
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
@@ -258,15 +267,16 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    googleLogo: {
+    socialLogo: {
         width: 24,
         height: 24,
         marginRight: 10,
     },
     socialLoginButtonText: {
-        color: '#000000',
+        color: '#FFFFFF',
         fontSize: 17,
         fontFamily: 'Courier New',
+        fontWeight:'bold',
         textShadowOffset: { width: 1, height: 1 },
         textShadowRadius: 0,
     },
@@ -277,13 +287,19 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     separatorText: {
-        color: 'rgba(96, 37, 166, 0.8)',
+        color: 'rgba(116, 116, 116, 0.8)',
         fontSize: 16,
         paddingHorizontal: 10,
     },
     line: {
         width: 130,
         height: 1,
-        backgroundColor: 'rgba(96, 37, 166, 0.5)',
+        backgroundColor: 'rgba(116, 116, 116, 0.5)',
+    },
+    socialButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: 300,
+        marginBottom: 15,
     },
 });

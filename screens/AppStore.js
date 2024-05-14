@@ -210,10 +210,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     menuButton: {
-        padding: 8,
+        padding: 10,
         borderRadius: 20,
         elevation: 5,
-        marginTop: 10,
         backgroundColor: '#9D33FA', // Añadí un color de fondo para hacerlo más visible
     },
     title: {
@@ -229,7 +228,6 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 10,
     },
     userButtonText: {
         color: 'white',
@@ -251,19 +249,18 @@ const styles = StyleSheet.create({
     },
     userDropdownMenu: {
         position: 'absolute',
-        top: 85, // Cambia el valor de top para mover el menú más abajo
+        top: 85,
         right: 10,
         backgroundColor: '#090819',
-        padding: 10,
-        borderRadius: 5,
+        padding: 15,
+        borderRadius: 10,
         shadowColor: 'black',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
         zIndex: 2,
-        width: 150,
+        width: 200,
     },
-    
     menuContainer: {
         flexDirection: 'column',
     },
@@ -273,16 +270,17 @@ const styles = StyleSheet.create({
     menuOption: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
-        paddingHorizontal: 16,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         borderRadius: 5,
     },
     menuOptionText: {
         color: 'white',
+        fontSize: 18,
         marginLeft: 10,
     },
     icon: {
-        marginRight: 10,
+        marginRight: 15,
     },
     contentContainer: {
         flex: 1,
